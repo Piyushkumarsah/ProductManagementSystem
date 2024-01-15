@@ -14,7 +14,7 @@ export default function Profile() {
       setEmail(data.email);
       setph(data.ph);
     }
-  }, []); // Empty dependency array to run the effect only once after initial render
+  }, []); // Empty dependency array to \run the effect only once after initial render
 
   return (
     <div className='border2 border bg-lime-800 h-screen flex flex-col items-center'>
