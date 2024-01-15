@@ -10,7 +10,7 @@ const corsOptions = {
     origin: 'https://your-render-app.render.com', // Replace with your Render app's domain
     optionsSuccessStatus: 200,
 };
-app.use(Cors());
+app.use(Cors(corsOptions));
 app.use(express.json());
 const port = process.env.PORT || 5000;
 
