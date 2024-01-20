@@ -4,11 +4,13 @@ const Cors = require('cors');
 const Product = require('./product');
 const User = require('./user');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const jwtkey = process.env.JWT_SECRET || 'dashboard';
 const app = express();
 
 app.use(Cors());
 app.use(express.json());
+
 
 if (process.env.NODE_ENV === 'production') {
     app.use(enforce.HTTPS({ trustProtoHeader: true }));

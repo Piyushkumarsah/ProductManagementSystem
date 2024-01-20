@@ -4,9 +4,7 @@ import Login from './components//Login'
 import Profile from './components//Profile'
 import Products from './components/Products'
 import Footer from './components/Footer'
-
 import { BrowserRouter , Routes,Route,} from 'react-router-dom';
-
 import './App.css';
 import List from './components/List';
 
