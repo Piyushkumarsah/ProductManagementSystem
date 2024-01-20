@@ -6,17 +6,19 @@ const User = require('./user');
 const jwt = require('jsonwebtoken');
 const jwtkey = process.env.JWT_SECRET || 'dashboard';
 const app = express();
-const corsOptions = {
-    origin: 'https://your-render-app.render.com', // Replace with your Render app's domain
-    optionsSuccessStatus: 200,
-};
-app.use(Cors(corsOptions));
-app.use(express.json());
-const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.use(Cors());
+app.use(express.json());
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/db3');
 const comparePasswords = async (providedPassword, storedPassword) => {
     try {
@@ -42,13 +44,13 @@ app.post('/Login', async (req, res) => {
         if (!isPasswordValid) {
             return res.status(400).json({ error: 'Wrong Password' });
         }
-        else{
-        jwt.sign({user},jwtkey,{expiresIn:'3h'},(err,token)=>{
-            if(err){
-                return res.send("Token not generated");
-            }
-            return res.status(200).json({ message: 'Login successfull', user, token});
-        })
+        else {
+            jwt.sign({ user }, jwtkey, { expiresIn: '3h' }, (err, token) => {
+                if (err) {
+                    return res.send("Token not generated");
+                }
+                return res.status(200).json({ message: 'Login successfull', user, token });
+            })
         }
 
     } catch (error) {
@@ -62,8 +64,8 @@ app.post('/Register', async (req, res) => {
         let data = new User(req.body);
         let result = await data.save();
         console.log(result);
-        jwt.sign({data},jwtkey,{expiresIn:'3h'},(err,token)=>{
-            if(err){
+        jwt.sign({ data }, jwtkey, { expiresIn: '3h' }, (err, token) => {
+            if (err) {
                 return res.send("Token not generated successfully");
             }
             return res.status(200).json({ message: 'Login successfull', data, token });
@@ -78,7 +80,7 @@ app.post('/Register', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-app.post('/add-products',verifytoken, async (req, res) => {
+app.post('/add-products', verifytoken, async (req, res) => {
     try {
         const { name, price, company } = req.body;
         console.log({ name });
@@ -98,11 +100,11 @@ app.post('/add-products',verifytoken, async (req, res) => {
         });
     }
 });
-app.get('/getproductlist',verifytoken, async (req, res) => {
+app.get('/getproductlist', verifytoken, async (req, res) => {
     try {
-        const productData = await Product.find(); 
+        const productData = await Product.find();
         if (productData.length > 0) {
-            res.json(productData); 
+            res.json(productData);
         } else {
             res.status(404).send("No data available");
         }
@@ -111,32 +113,31 @@ app.get('/getproductlist',verifytoken, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-app.put('/updateproduct',verifytoken, async (req, res) => {
+app.put('/updateproduct', verifytoken, async (req, res) => {
     try {
         const productId = (req.body._id);
         const updatedProduct = req.body;
 
         const result = await Product.findByIdAndUpdate(productId, updatedProduct, { new: true });
         if (result) {
-            res.status(200).json({message: "Updated"});
+            res.status(200).json({ message: "Updated" });
         }
         else {
             res.status(404).send("Server Error")
         }
     }
-    catch(err)
-    {
+    catch (err) {
         res.status(400).json(err)
     }
 });
-app.delete('/deleteproduct',verifytoken, async (req,res)=>{
+app.delete('/deleteproduct', verifytoken, async (req, res) => {
     const itemId = req.body.itemId;
     const result = await Product.findByIdAndDelete(itemId);
-    if(result){
+    if (result) {
         res.status(200).send("Successfully Deleted");
     }
-    else{
-        res.status(404).send({message:"Item not deleted",error: "Probably server error"})
+    else {
+        res.status(404).send({ message: "Item not deleted", error: "Probably server error" })
     }
 
 })
@@ -145,15 +146,15 @@ function verifytoken(req, res, next) {
     if (!token) {
         return res.status(401).send('No authorization token');
     }
-    
+
     token = token.split(' ')[1];
 
     jwt.verify(token, jwtkey, (err, decoded) => {
         if (err) {
             console.error('Session Expired:-', err);
-            return res.status(404).send({message:"Session Expp",error: "Session Exp"});
+            return res.status(404).send({ message: "Session Expp", error: "Session Exp" });
         } else {
-            req.user = decoded.user; 
+            req.user = decoded.user;
             next();
         }
     });

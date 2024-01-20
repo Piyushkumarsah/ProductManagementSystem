@@ -107,7 +107,9 @@ export default function List() {
                     </div>
                     <div>
                         <ul className='mt-2 flex justify-between bg-lime-500'>
-                            <div className='border-2 w-full'><li>SNo.</li></div>
+                            <div>
+                                <div className='border-2 w-20'><li>SNo.</li></div>
+                            </div>
                             <div className='border-2 w-full'><li>Name</li></div>
                             <div className='border-2 w-full'><li>Price ($)</li></div>
                             <div className='border-2 w-full'><li>Company</li></div>
@@ -124,7 +126,9 @@ export default function List() {
                         {products.map((item, i) => (
                             <>
                                 <ul className='flex justify-between bg-lime-200' key={i}>
-                                    <div className='border-2 w-full'><li>{i + 1}</li></div>
+                                    <div>
+                                        <div className='border-2 w-20'><li>{i + 1}</li></div>
+                                    </div>
                                     <div className='border-2 w-full'><li>{item.name}</li></div>
                                     <div className='border-2 w-full'><li>{item.price}</li></div>
                                     <div className='border-2 w-full'><li>{item.company}</li></div>
@@ -148,7 +152,7 @@ export default function List() {
                                     confirmDelete && item === deleteItem &&
                                     <div>
                                         <div className='bg-red-400 flex items-center justify-center'>
-                                            <button className='bg-blue-300  w-24 m-2' onClick={()=>deleteProduct(item)}>Confirm</button>
+                                            <button className='bg-blue-300  w-24 m-2' onClick={() => deleteProduct(item)}>Confirm</button>
                                             <button className='bg-blue-300  w-24 m-2 ' onClick={() => setConfirmDelete(false)}>Cancel</button>
                                         </div>
                                     </div>
