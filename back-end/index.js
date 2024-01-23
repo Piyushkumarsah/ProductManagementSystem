@@ -12,9 +12,6 @@ app.use(Cors());
 app.use(express.json());
 
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(enforce.HTTPS({ trustProtoHeader: true }));
-}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

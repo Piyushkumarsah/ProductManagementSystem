@@ -34,7 +34,7 @@ export default function Registerform() {
                     <div className='flex flex-col m-auto border border-lime-800 bg-lime-200  items-center p-24'>
                         <input className=' text-center border-2 border-black m-2' type="email" name="email" id="" value={email} onChange={(e) => { setemail(e.target.value) }} placeholder='Email' />
                         <input className=' text-center border-2 border-black m-2' type="password" placeholder='Password' value={password} onChange={(event) => { setpassword(event.target.value) }} />
-                        <button className=' bg-lime-500 w-24 mt-5 border-lime-600 border-2' onClick={()=>{
+                        <button className=' bg-lime-500 w-24 mt-5 border-lime-600 border-2' onKeyUp={(e)=>{e.key === 'Enter' && callLogin()}} onClick={()=>{
                             callLogin()
                         }}>Submit</button>
                         {errorMessage && <p className='text-green-800'>{errorMessage}</p>}
