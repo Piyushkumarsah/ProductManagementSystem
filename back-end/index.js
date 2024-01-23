@@ -18,7 +18,10 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/db3');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/db3',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+});
 const comparePasswords = async (providedPassword, storedPassword) => {
     try {
         return providedPassword === storedPassword ? true : false;
